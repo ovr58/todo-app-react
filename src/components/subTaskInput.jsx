@@ -26,7 +26,7 @@ export const SubTaskInput = observer(({ofTask, setFocus = false}) => {
             subInputRef.current.focus()
         }
     }, [setFocus])
-    
+
     return (
         <div key='subTaskInput' className="flex md:flex-row flex-col p-3 bg-component dark:bg-componentDark rounded-lg mb-3">
             <input 
@@ -44,6 +44,8 @@ export const SubTaskInput = observer(({ofTask, setFocus = false}) => {
                     focus:ring-2 
                     focus:ring-primary 
                     dark:focus:ring-secondary
+                    text-dark
+                    dark:text-light
                 " 
                 placeholder="Добавить задачу" 
                 value={subTask}

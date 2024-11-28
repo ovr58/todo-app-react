@@ -46,6 +46,8 @@ export const TaskInput = observer(({ofTask}) => {
                     focus:ring-2 
                     focus:ring-primary 
                     dark:focus:ring-secondary
+                    text-dark
+                    dark:text-light
                 " 
                 placeholder="Добавить задачу" 
                 value={task}

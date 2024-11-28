@@ -5,6 +5,7 @@ import { FaRegEdit } from "react-icons/fa"
 import { ImCheckboxChecked } from "react-icons/im"
 import { IoIosAddCircle, IoIosAddCircleOutline } from "react-icons/io"
 import { SubTaskInput } from "./subTaskInput"
+import { motion } from "framer-motion"
 
 export const TaskItem = (props) => {
 
@@ -12,21 +13,26 @@ export const TaskItem = (props) => {
   
     return (
     <>
-    <div className="
-        flex
-        items-center
-        justify-between
-        px-3
-        my-[7px]
-        h-[48px]
-        bg-component
-        dark:bg-componentDark
-        text-dark
-        dark:text-light
-        rounded-lg
-        gap-1.5
-        shadow-md
-    ">
+    <motion.div 
+        className="
+            flex
+            items-center
+            justify-between
+            px-3
+            my-[7px]
+            h-[48px]
+            bg-component
+            dark:bg-componentDark
+            text-dark
+            dark:text-light
+            rounded-lg
+            gap-1.5
+            shadow-md
+        "
+        initial={{ opacity: 1, height: 'auto' }}
+        exit={{ opacity: 0, height: 0, margin: 0, padding: 0 }}
+        transition={{ duration: 0.5 }}
+    >
         <button 
             className='w-[5%] cursor-pointer'
             title={props.task.completed ? "Убрать отметку выполненно" : "Отметить как выполненно"} 
@@ -76,7 +82,9 @@ export const TaskItem = (props) => {
                     after:top-[calc(50%)]
                     after:bg-primary
                     after:ease-in-out
-                    ${props.task.completed ? 'after:w-full' : 'after:w-0'}
+                    ${props.task.completed ? 
+                        'after:w-full' : 'after:w-0'
+                    }
                     after:duration-300
                     after:transition-all
                     text-left 
@@ -95,7 +103,7 @@ export const TaskItem = (props) => {
             <MdDelete />
         </button>
 
-    </div>
+    </motion.div>
     {props.isInputOpen === props.task.id && !props.task.completed && <SubTaskInput ofTask={props.task.id} setFocus={true}/>}
     </>
   )

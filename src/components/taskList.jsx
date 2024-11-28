@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite"
 import { TaskItem } from "./taskItem"
 import { useStore } from "../stores"
 import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 
 export const TaskList = observer(() => {
 
@@ -22,20 +23,22 @@ export const TaskList = observer(() => {
 
     const renderTasks = (tasks) => {
         return tasks.map(task => (
-          <div key={task.id}>
+          <motion.div key={task.id}>
             <TaskItem task={task} isInputOpen={isInputOpen} setIsInputOpen={setIsInputOpen} />
             {task.subTasks.length > 0 && (
               <div className="ml-4">
                 {renderTasks(task.subTasks)}
               </div>
             )}
-          </div>
+          </motion.div>
         ));
       };
 
   return (
     <div className="mt-6">
-        {renderTasks(tasksTree)}
+        <AnimatePresence>
+            {renderTasks(tasksTree)}
+        </AnimatePresence>
         <div className="py-3 text-center text-gray-500 flex justify-evenly">
             {store.tasks.tasks.length === 0 && 'Нет задач'}
             {store.tasks.tasks.length === 0 && <div></div>}
