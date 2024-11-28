@@ -29,7 +29,7 @@ export const TaskItem = (props) => {
             gap-1.5
             shadow-md
         "
-        initial={{ opacity: 1, height: 'auto' }}
+        initial={{ opacity: 1, height: '48px' }}
         exit={{ opacity: 0, height: 0, margin: 0, padding: 0 }}
         transition={{ duration: 0.5 }}
     >

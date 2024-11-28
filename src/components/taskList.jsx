@@ -23,14 +23,16 @@ export const TaskList = observer(() => {
 
     const renderTasks = (tasks) => {
         return tasks.map(task => (
-          <motion.div key={task.id}>
+          <div key={task.id}>
             <TaskItem task={task} isInputOpen={isInputOpen} setIsInputOpen={setIsInputOpen} />
             {task.subTasks.length > 0 && (
-              <div className="ml-4">
-                {renderTasks(task.subTasks)}
+              <div key={task.id} className="ml-4">
+                <AnimatePresence key={task.id}>
+                    {renderTasks(task.subTasks)}
+                </AnimatePresence>
               </div>
             )}
-          </motion.div>
+          </div>
         ));
       };
 
