@@ -9,7 +9,7 @@ export const TaskList = observer(() => {
 
     const [isInputOpen, setIsInputOpen] = useState('')
 
-    const getTasksTree = (tasks, parentId = -1) => {
+    const getTasksTree = (tasks, parentId = '-1') => {
         return tasks
             .filter(task => task.ofTask === parentId)
             .map(task => ({

@@ -72,7 +72,7 @@ export const TaskItem = (props) => {
         </button>
 
     </div>
-    {props.isInputOpen === props.task.id && !props.task.completed && <SubTaskInput ofTask={props.task.id} />}
+    {props.isInputOpen === props.task.id && !props.task.completed && <SubTaskInput ofTask={props.task.id} setFocus={true}/>}
     </>
   )
 }

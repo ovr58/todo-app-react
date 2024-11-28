@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { useStore } from "../stores"
 import { useEffect, useRef, useState } from "react"
 
-export const SubTaskInput = observer(({ofTask}) => {
+export const SubTaskInput = observer(({ofTask, setFocus = false}) => {
     
     const store = useStore()
 
@@ -22,12 +22,11 @@ export const SubTaskInput = observer(({ofTask}) => {
     }
 
     useEffect(() => {
-        if (store.tasks.getTaskEdit) {
-            setSubTask(store.tasks.getTaskEdit.task)
+        if (setFocus) {
             subInputRef.current.focus()
         }
-    }, [store.tasks.getTaskEdit, ofTask])
-
+    }, [setFocus])
+    
     return (
         <div key='subTaskInput' className="flex md:flex-row flex-col p-3 bg-component dark:bg-componentDark rounded-lg mb-3">
             <input 

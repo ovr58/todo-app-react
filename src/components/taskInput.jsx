@@ -23,6 +23,7 @@ export const TaskInput = observer(({ofTask}) => {
 
     useEffect(() => {
         if (store.tasks.getTaskEdit) {
+            console.log('FOCUS')
             setTask(store.tasks.getTaskEdit.task)
             inputRef.current.focus()
         }

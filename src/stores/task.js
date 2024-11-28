@@ -21,11 +21,13 @@ export class TasksStore {
     taskEdit = ''
 
     fetchs() {
+        console.log(localStorage.getItem('tasks'))
         this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
         console.log(this.tasks)
     }
 
     sync() {
+        console.log(localStorage.getItem('tasks'))
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
         this.fetchs()
     }
@@ -69,33 +71,62 @@ export class TasksStore {
     }
 
     removeTask(id) {
-        this.tasks = this.tasks.filter(task => task.id !== id && task.ofTask !== id);
+        // Рекурсивная функция для удаления подзадач
+        const removeSubTasks = (taskId) => {
+            this.tasks
+            .filter(task => task.ofTask === taskId)
+            .forEach(subTask => {
+                removeSubTasks(subTask.id);
+                this.tasks = this.tasks.filter(task => task.id !== subTask.id);
+            });
+        };
+    
+        // Удаляем подзадачи
+        removeSubTasks(id);
+    
+        // Удаляем саму задачу
+        this.tasks = this.tasks.filter(task => task.id !== id);
+  
         this.sync();
     }
 
     toggleCompleted(id) {
-        const clickedTask = this.tasks.find(task => task.id === id);
-        const indexOfClickedTask = this.tasks.findIndex(task => task.id === id);
-        const indices = this.tasks.reduce((acc, task, index) => {
-            if (task.ofTask === id) {
-                acc.push(index);
+        //находим задачу которую кликнули
+        const taskIndex = this.tasks.findIndex(task => task.id === id)
+        if (taskIndex === -1) return
+        //меняем статус задачи
+        const clickedTask = this.tasks[taskIndex];
+        clickedTask.completed = !clickedTask.completed;
+        clickedTask.updatedAt = Date.now()
+
+        // Рекурсивно обновляем статус подзадач
+        const updateSubTasks = (parentTaskId, completedStatus) => {
+            this.tasks.forEach(task => {
+            if (task.ofTask === parentTaskId) {
+                task.completed = completedStatus;
+                task.updatedAt = Date.now();
+                updateSubTasks(task.id, completedStatus);
             }
-            return acc;
-        }, []);
-        this.tasks[indexOfClickedTask].completed = !clickedTask.completed;
-        for (const index of indices) {
-            this.tasks[index].completed = clickedTask.completed;
-            this.tasks[index].updatedAt = Date.now();
-        }
-        if (clickedTask.ofTask !== '-1') {
-            const allTaskOfTheSameLevel = this.tasks.filter(task => task.ofTask === clickedTask.ofTask);
-            const allCompleted = allTaskOfTheSameLevel.every(task => task.completed);
-            if (allCompleted) {
-                const parentIndex = this.tasks.findIndex(task => task.id === clickedTask.ofTask);
-                this.tasks[parentIndex].completed = true;
-                this.tasks[parentIndex].updatedAt = Date.now();
+            });
+        };
+    
+        updateSubTasks(clickedTask.id, clickedTask.completed)
+         // Рекурсивно проверяем и обновляем статус родительских задач
+        const updateParentTasks = (taskId) => {
+            const task = this.tasks.find(task => task.id === taskId);
+            if (task && task.ofTask) {
+                const allTaskOfTheSameLevel = this.tasks.filter(t => t.ofTask === task.ofTask);
+                const allCompleted = allTaskOfTheSameLevel.every(t => t.completed);
+                const parentIndex = this.tasks.findIndex(t => t.id === task.ofTask);
+                if (parentIndex !== -1) {
+                    this.tasks[parentIndex].completed = allCompleted;
+                    this.tasks[parentIndex].updatedAt = Date.now();
+                    updateParentTasks(this.tasks[parentIndex].id);
+                }
             }
-        }
+        };
+    
+        updateParentTasks(clickedTask.id);
         this.sync();
     }
 
