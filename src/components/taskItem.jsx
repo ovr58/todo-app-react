@@ -27,25 +27,39 @@ export const TaskItem = (props) => {
         gap-1.5
         shadow-md
     ">
-        <button className='w-[5%]' onClick={() => {store.tasks.toggleCompleted(props.task.id)}}>
+        <button 
+            className='w-[5%] cursor-pointer'
+            title={props.task.completed ? "Убрать отметку выполненно" : "Отметить как выполненно"} 
+            onClick={() => {store.tasks.toggleCompleted(props.task.id)}}
+        >
             {props.task.completed ? <ImCheckboxChecked /> : <MdCheckBoxOutlineBlank />}
         </button>
 
-        <button className='w-[5%]' onClick={() => (props.setIsInputOpen(''), store.tasks.editTask(props.task))}>
+        <button 
+            className='w-[5%] cursor-pointer'
+            title='Редактировать задачу' 
+            onClick={() => (
+                props.setIsInputOpen(''), 
+                store.tasks.editTask(props.task)
+            )}
+        >
             <FaRegEdit />
         </button>
 
         {
             !props.task.completed && 
-            <button className='w-[5%]' onClick={
-                () => 
-                (props.setIsInputOpen(
-                    props.isInputOpen === props.task.id ? '' : props.task.id
-                ), store.tasks.editTask(''))}>
-                {
-                props.isInputOpen === props.task.id ? 
-                    <IoIosAddCircle /> : 
-                    <IoIosAddCircleOutline />
+            <button 
+                className='w-[5%] cursor-pointer'
+                title='Добавить подзадачу' 
+                onClick={
+                    () => 
+                        (props.setIsInputOpen(
+                            props.isInputOpen === props.task.id ? '' : props.task.id
+                        ), store.tasks.editTask(''))}>
+                        {
+                        props.isInputOpen === props.task.id ? 
+                            <IoIosAddCircle /> : 
+                            <IoIosAddCircleOutline />
                 }
             </button>
         }
@@ -53,9 +67,18 @@ export const TaskItem = (props) => {
         <div className="flex-grow truncate">
             <label 
                 className={
-                    `${props.task.completed ? 
-                    'line-through' : 
-                    'font-bold'}
+                    `inline
+                    relative
+                    after:content-['']
+                    after:absolute
+                    after:left-0
+                    after:h-[2px]
+                    after:top-[calc(50%)]
+                    after:bg-primary
+                    after:ease-in-out
+                    ${props.task.completed ? 'after:w-full' : 'after:w-0'}
+                    after:duration-300
+                    after:transition-all
                     text-left 
                     truncate`
                 }
@@ -65,7 +88,8 @@ export const TaskItem = (props) => {
         </div>
 
         <button 
-            className='text-danger ml-auto'
+            className='text-danger ml-auto cursor-pointer'
+            title='Удалить задачу'
             onClick={() => store.tasks.removeTask(props.task.id)}
         >
             <MdDelete />
