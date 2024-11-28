@@ -16,7 +16,7 @@ export const App = observer(() => {
   return (
     <div className="max-w-screen-md mx-auto p-3 gap-3">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Somehow I Manage</h1>
+        <h1 className="text-3xl font-bold text-dark dark:text-light">Somehow I Manage</h1>
         <ThemeToggle />
       </div>
       <TaskInput ofTask={'-1'} />
